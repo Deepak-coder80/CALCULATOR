@@ -1,5 +1,9 @@
+import 'package:calculator/theme/theme_model.dart';
+import 'package:calculator/theme/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './screens/home_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -10,13 +14,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Calculator',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (_) => ThemeModel(),
+      child: Consumer<ThemeModel>(
+        builder: (context, ThemeModel themeNotifier, child) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Calculator',
+              theme: themeNotifier.isDark ? CustomTheme.darkTheme:CustomTheme.lightTheme,
+              home: const HomeScreen());
+        },
       ),
-      home: const HomeScreen()
     );
   }
 }
