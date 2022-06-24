@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/calc_button.dart';
-import '';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -41,12 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   //is operator function
-  bool isOperator(String s){
-    if(s=='+'||s=='-'||s=='/'||s=='%'||s=='x'){
+  bool isOperator(String s) {
+    if (s == '+' || s == '-' || s == '/' || s == '%' || s == 'x') {
       return true;
     }
     return false;
   }
+
+  //get the results
+  void equalPressed() {
+    //store userQuestion to some other variables
+    String finalQuestion = userQuestion;
+    //replace x with *
+    finalQuestion = finalQuestion.replaceAll('x', '*');
+    //replace %
+    finalQuestion = finalQuestion.replaceAll('%', '*0.01');
+
+    //create expression via parser
+    Parser parser = Parser();
+    Expression exp = parser.parse(finalQuestion);
+    //bind variables
+    ContextModel cm = ContextModel();
+    //calculate
+    double result = exp.evaluate(EvaluationType.REAL, cm);
+
+    //assign result to userAnswer
+    userAnswer = result.toString();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           //display the user input
           SizedBox(
-            height: MediaQuery.of(context).size.height/6,
+            height: MediaQuery.of(context).size.height / 6,
           ),
           Container(
             padding: const EdgeInsets.all(20),
@@ -102,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonTapped: () {
                       //clear userQuestions and userAnswer
                       setState(() {
-                        userQuestion='';
-                        userAnswer='';
+                        userQuestion = '';
+                        userAnswer = '';
                       });
                     },
                   );
@@ -117,23 +140,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonTapped: () {
                       //delete one index from userQuestion from the back
                       setState(() {
-                        userQuestion=userQuestion.substring(0,userQuestion.length-1);
+                        userQuestion =
+                            userQuestion.substring(0, userQuestion.length - 1);
                       });
                     },
                   );
                 }
-                //equal button
-                if (index == buttons.length-1) {
+                //equal button and answer button
+                if (index == buttons.length - 1) {
                   return MyButton(
                     color: Colors.purple,
                     textColor: Colors.white,
                     buttonText: buttons[index],
-                    buttonTapped: () {},
+                    buttonTapped: () {
+                      setState(() {
+                        equalPressed();
+                      });
+                    },
+                  );
+                }
+                // answer button
+                if (index == buttons.length - 2) {
+                  return MyButton(
+                    color: Colors.white,
+                    textColor: Colors.purple,
+                    buttonText: buttons[index],
+                    buttonTapped: () {
+                      setState(() {
+                        equalPressed();
+                      });
+                    },
                   );
                 }
                 return MyButton(
-                  color:isOperator(buttons[index])?Colors.purple:Colors.white,
-                  textColor: isOperator(buttons[index])?Colors.white:Colors.purple,
+                  color:
+                      isOperator(buttons[index]) ? Colors.purple : Colors.white,
+                  textColor:
+                      isOperator(buttons[index]) ? Colors.white : Colors.purple,
                   buttonText: buttons[index],
                   buttonTapped: () {
                     //concatenate
