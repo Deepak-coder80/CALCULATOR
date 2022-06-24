@@ -23,7 +23,7 @@ class CustomTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       primaryColor: Colors.orange,
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: Colors.black,
       backgroundColor: Colors.red,
       focusColor: Colors.green,
       fontFamily: 'Montserrat',
