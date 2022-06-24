@@ -1,3 +1,4 @@
+import 'package:calculator/theme/themes.dart';
 import 'package:flutter/material.dart';
 import '../utils/calc_button.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -149,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //equal button and answer button
                 if (index == buttons.length - 1) {
                   return MyButton(
-                    color: Colors.purple,
+                    color:CustomTheme.lightTheme.primaryColor,
                     textColor: Colors.white,
                     buttonText: buttons[index],
                     buttonTapped: () {
